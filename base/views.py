@@ -1,3 +1,4 @@
+from email import message
 from re import I
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -78,12 +79,9 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 def room(request, pk):
-    # room = None
-    # for i in rooms:
-    #     if i['id'] == int(pk):
-    #         room = i
     room = Room.objects.get(id=pk)
-    context = {'room': room}
+    messages = room.message_set.all()
+    context = {'room': room , 'messages':messages}
     return render(request, 'base/room.html',context)
 
 @login_required(login_url='login')
