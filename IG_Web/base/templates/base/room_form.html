@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <form class="form" action="" method="POST">
+        {% csrf_token %}
+
+        {{form.as_p}}
+
+        <!-- <div class="form__group">
+            <label for="room_topic">Topic</label>
+            {{form.description}}
+        </div> -->
+
+        <!-- <div class="form__group">
+            <label for="room_name">Room Name</label>
+            {{form.name}}
+        </div> -->
+
+        <!-- <div class="form__group">
+            <label for="room_description">Room Description</label>
+            {{form.description}}
+        </div> -->
+
+
+        <input type="submit" value="送出" />
+    </form>
+</div>
+
+{% endblock content %}

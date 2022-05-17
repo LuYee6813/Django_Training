@@ -9,13 +9,13 @@
     <form method="POST" action="">
         {% csrf_token %}
 
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Enter Username" />
+        <label>使用者名稱:</label>
+        <input type="text" name="username" placeholder="請輸入使用者名稱" />
 
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Enter Password" />
+        <label>密碼:</label>
+        <input type="password" name="password" placeholder="請輸入密碼" />
 
-        <input type="submit" value="Login" />
+        <input type="submit" value="登入" />
         <p>還沒註冊</p>
         <a href="{% url 'register' %}">註冊</a>
     </form>
@@ -27,7 +27,7 @@
     <form method="POST" action="">
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value="Register" />
+        <input type="submit" value="註冊" />
         <p>已經註冊</p>
         <a href="{% url 'login' %}">登入</a>
     </form>
