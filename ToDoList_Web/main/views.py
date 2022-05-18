@@ -6,5 +6,5 @@ from .models import ToDoList, Item
 def index(request, name):
     ls = ToDoList.objects.get(name=name)
     items = ls.item_set.get(id=1)
-    return HttpResponse(<h1>"%s"</h1> %ls.name, item.text)
+    return HttpResponse("%s %s" %ls.name, item.text)
 
