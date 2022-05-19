@@ -1,0 +1,8 @@
+Movies 
+{% for movie in movies%}
+<ul>
+    <li><a href="{{ movie.id }}">{{ movie.title }}</a></li>
+</ul>
+{% endfor %}
+
+<a href="/add"> 新增電影</a>

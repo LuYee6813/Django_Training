@@ -1,0 +1,10 @@
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="title">電影名稱：</label>
+    <input type="text" name="title" id="'title">
+
+    <label for="year">上映時間：</label>
+    <input type="text" name="year" id="'year">
+    
+    <input type="submit" value="Add">
+</form>
