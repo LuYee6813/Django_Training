@@ -1,10 +1,17 @@
 <form action="" method="POST">
     {% csrf_token %}
-    <label for="title">電影名稱：</label>
-    <input type="text" name="title" id="'title">
+    <div>
+        <label for="title">電影名稱：</label>
+        <input type="text" name="title" id="'title">    
+    </div>
 
-    <label for="year">上映時間：</label>
-    <input type="text" name="year" id="'year">
+    <div>
+        <label for="year">上映時間：</label>
+        <input type="text" name="year" id="'year">
+    </div>
+
+    <div>
+        <input type="submit" value="新增">
+    </div>
     
-    <input type="submit" value="Add">
 </form>

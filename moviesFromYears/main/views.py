@@ -1,3 +1,4 @@
+from urllib import request
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from .models import Movie
@@ -19,3 +20,7 @@ def add(request):
         movie.save()
         return HttpResponseRedirect('/')   
     return render(request, 'add.html',{'title':title,'year':year})
+
+def delete(request,id):
+    Movie.objects.get(pk=id).delete()
+    return HttpResponseRedirect('/')  
