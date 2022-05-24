@@ -1,16 +1,18 @@
+from email.mime import image
+from urllib import request
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profile
-
+from .models import Profile,Post
 
 
 @login_required(login_url='loginUser')
 def home(request):
     user_profile = Profile.objects.get(user=request.user)
-    context = {"user_profile":user_profile}
+    post_content = Post.objects.all()
+    context = {"user_profile":user_profile,"post_content":post_content}
     return render(request,'home.html',context)
 
 def signup(request):
@@ -106,5 +108,14 @@ def settings(request):
 @login_required(login_url='loginUser')
 def post(request):
     user_profile = Profile.objects.get(user=request.user)
+    if request.method == "POST":
+        image = request.FILES.get("postfile")
+        user = request.user.username
+        caption = request.POST.get("caption")
+        new_post = Post.objects.create(user=user,image=image,caption=caption)
+        new_post.save()
+        return redirect('/')
+    
     context = {"user_profile":user_profile}
     return render(request,'post.html',context)
+

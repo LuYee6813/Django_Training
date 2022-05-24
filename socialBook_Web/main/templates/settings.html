@@ -42,7 +42,7 @@
         border: 0;
         margin-bottom: 1rem;
     }
-    .form-control {
+    .card-body .form-control {
         border: 1px solid #596280;
         -webkit-border-radius: 2px;
         -moz-border-radius: 2px;
@@ -53,7 +53,7 @@
     }
 </style>
 
-<div class="container" style="margin-top: 10%;">
+<div class="container">
     <div class="row gutters">
         <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
             <div class="card h-100">
@@ -61,7 +61,6 @@
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="user-avatar">
-                                <!-- https://avatars.githubusercontent.com/u/42244975?v=4 -->
                                 <img src="{{user_profile.profileimg.url}}" alt="Maxwell Admin">
                             </div>
                             <h5 class="user-name">{{user.username}}</h5>
