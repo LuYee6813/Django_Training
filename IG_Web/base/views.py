@@ -1,5 +1,3 @@
-from email import message
-from pydoc_data.topics import topics
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
