@@ -1,0 +1,84 @@
+{% extends 'main.html' %}
+{% block post-page %}
+<style>
+    .post-svg{
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="card" style="width: 50rem; height: 35rem; text-align: center" >
+            <div class="card-body">
+
+                <div id="card-title">
+                    <h5>建立新貼文</h5>
+                    <p>將圖片或影片拖曳至此</p>    
+                    <div class="post-svg">              
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15%" height="15%" fill="currentColor" class="bi bi-postcard-heart" viewBox="0 0 16 16">
+                            <path d="M8 4.5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7Zm3.5.878c1.482-1.42 4.795 1.392 0 4.622-4.795-3.23-1.482-6.043 0-4.622ZM2.5 5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3Z"/>
+                            <path fill-rule="evenodd" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2Z"/>
+                        </svg>
+                    </div>
+                </div>
+
+
+
+                <div class="card-img" style="margin-bottom: 3%;">
+                    <img style="max-width: 30rem; max-height: 15rem;" id="output"/>
+                </div>
+
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" id="file" name="postfile" style="display:none;" onchange="loadFile(event)" />
+
+                    <div style="font-size: 10;">
+                        <label for="caption">描述：</label>
+                    </div>
+
+                    <div style="margin-bottom: 3%;">
+                        <textarea name="caption" id="" cols="50" rows="3"></textarea>
+                    </div>
+                    
+                    <button type="submit" style="margin-bottom: 5%; display:none;" id="upload" class="btn btn-success" >上傳</button>
+                </form>
+                
+                <button class="btn btn-success" id="chimg" name="button" value="Upload" onclick="thisFileUpload();">
+                    選擇圖片
+                </button>
+
+
+                
+
+                </button>
+
+                <script>
+                    function thisFileUpload() {
+                        document.getElementById("file").click();
+                    };
+
+                    var loadFile = function(event) {
+                        var output = document.getElementById('output');
+                        output.src = URL.createObjectURL(event.target.files[0]);
+                        output.onload = function() {
+                        URL.revokeObjectURL(output.src) // free memory
+                        }
+                        var upload = document.getElementById('upload')
+                        var chimg = document.getElementById('chimg')
+                        var cardtitle = document.getElementById('card-title')
+                        upload.style.display = 'inline';
+                        cardtitle.style.display = 'none';
+                        chimg.style.display = 'none';
+
+                    };
+                </script>
+                                        
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
