@@ -111,8 +111,9 @@ def post(request):
     if request.method == "POST":
         image = request.FILES.get("postfile")
         user = request.user.username
+        author_img = Profile.objects.get(user=request.user)
         caption = request.POST.get("caption")
-        new_post = Post.objects.create(user=user,image=image,caption=caption)
+        new_post = Post.objects.create(user=user,image=image,caption=caption,author_img=author_img)
         new_post.save()
         return redirect('/')
     

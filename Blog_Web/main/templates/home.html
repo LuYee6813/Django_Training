@@ -1,0 +1,19 @@
+<h1>Post</h1>
+
+<ul>
+{% for post in object_list %}
+
+    <strong>Author: {{ post.author }} </strong><br>
+    <small>title : {{ post.title }}</small><br>
+    <small>body : {{ post.body }} </small><br>
+
+   
+
+    <strong>{{ post.author.profile.user }} 's profile </strong><br>
+    <small>  About : {{ post.author.profile.about }} </small><br>
+    <small>  Location : {{ post.author.profile.location }} </small><br>
+
+    <hr>
+        
+{% endfor %}
+</ul>
