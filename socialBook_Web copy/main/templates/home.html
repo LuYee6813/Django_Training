@@ -4,32 +4,95 @@
     {% for p in post_content reversed %}
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card" style="width: 40rem; height:30rem; margin-bottom: 5%;">
+            <div class="card" style="width: 40rem; height:40rem; margin-bottom: 5%;">
                 <div class="card-body">
 
+                    <style>
+                        .card-title a {
+                            color:black;
+                            text-decoration: none;
+                        }
+                        .card-title a:hover {
+                            color:rgb(106, 106, 106);
+                        }
+                    </style>
+
                     <div class="card-title">
-                        <img src="{{p.author_img.profileimg.url}}" alt="Avatar Logo" style="width:30px; height: 30px;" class="rounded-pill"> 
-                        @{{p.user}} 
+                        <a href="{% url 'profile' p.author_img.user %}">
+                            <img src="{{p.author_img.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+                        </a>
+                        <a href="{% url 'profile' p.author_img.user %}">
+                            @{{p.user}}
+                        </a>    
                     </div>
-                    
+                
                     
                     <div class="card-img" style="text-align: center;">
                         <a href="{{p.image.url}}">
-                            <img style="max-width: 30rem; max-height: 20rem;"
+                            <img style="max-width: 35rem; max-height: 25rem;"
                             src="{{p.image.url}}" alt="">
                         </a>
 
                     </div>
 
-                    <div class="card-function">
- 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                        </svg>
+
+                    <div class="card-function" style="margin-top: 3%;">
+                        <style>
+                            .card-function button {
+                                 outline: none; 
+                                 border: none;
+                                 width: 30px; 
+                                 height: 30px; 
+                                 margin: 0; 
+                                 padding: 0; 
+                                 background-color: white;
+                            }
+                            button a#like , button a#like:hover  {
+                                color:rgba(247, 14, 14, 0.969);
+                                margin-left:-68px;
+                            }
+
+                            button a#unlike , button a#unlike:hover  {
+                                color:rgba(130, 130, 130, 0.969);
+                            }
+
+                        </style>
+
+                            
+
+                        <button name="unlike-button">
+
+                            <a id="unlike" href="/like-post?post_id={{p.id}}" >
+                                <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                </svg>
+                            </a>
+
+                        </button >
+                        
+
+
+                        <button name="like-button">
+
+                            <a id="like" href="/like-post?post_id={{p.id}}" >
+                                <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                </svg>
+                            </a>
+
+                        </button>
+            
+                    </div>
+
+
+
+                    <div class="card-likes" style="margin-top: 3%;">
+  
+                        <strong>愛心數：{{p.no_of_likes}}</strong>
 
                     </div>
 
-                    <div>
+                    <div class="card-message" style="margin-top: 3%;">
                         <strong>{{p.user}}:</strong>{{p.caption}}
                     </div>
 
@@ -39,4 +102,7 @@
     </div>
 
     {% endfor %}
+
+
+                 
 {% endblock %}

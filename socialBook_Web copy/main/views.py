@@ -1,18 +1,22 @@
-from email.mime import image
-from urllib import request
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profile,Post
+from .models import Profile,Post,LikePost
 
 
 @login_required(login_url='loginUser')
 def home(request):
     user_profile = Profile.objects.get(user=request.user)
     post_content = Post.objects.all()
-    context = {"user_profile":user_profile,"post_content":post_content}
+    post_like = LikePost.objects.all()
+    
+    context = {
+        "user_profile":user_profile,
+        "post_content":post_content,
+        "post_like":post_like
+    }
     return render(request,'home.html',context)
 
 def signup(request):
@@ -74,6 +78,22 @@ def logoutUser(request):
     return redirect('home')
 
 @login_required(login_url='loginUser')
+def profile(request,username):
+    user_profile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user=User.objects.get(username=username))
+
+    post = Post.objects.filter(user=User.objects.get(username=username))
+    post_count = Post.objects.filter(user=User.objects.get(username=username)).count()
+
+    context = {
+        "user_profile":user_profile,
+        "profile":profile,
+        "post_count":post_count,
+        "post":post,
+    }
+    return render(request, 'profile.html',context)
+
+@login_required(login_url='loginUser')
 def settings(request):
     user_profile = Profile.objects.get(user=request.user) 
     
@@ -120,3 +140,23 @@ def post(request):
     context = {"user_profile":user_profile}
     return render(request,'post.html',context)
 
+@login_required(login_url='loginUser')
+def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+    post = Post.objects.get(id=post_id)
+    like_filter = LikePost.objects.filter(post_id=post_id , username=username).first()
+    if like_filter == None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes + 1
+        post.save()
+        return redirect('/')      
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes - 1
+        post.save()
+        return redirect('/')
+        
+
+   

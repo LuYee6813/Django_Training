@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+{% block profile %}
+<style>
+    .user_img  {
+        width:15rem; height: 15rem;
+        margin-right: 70px;
+        margin-left: 100px;
+    }
+    .user_img img {
+        margin-top: 7%;
+        width:15rem; height: 15rem;
+    }
+    .user_info {
+        width:40rem; height: 15rem;
+
+    }
+    .user_name {
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+    .user_info label {
+        margin-right: 20px;
+    }
+    .user_about{
+        font-size: 20px;
+        margin-top: 25px;
+    }
+    .user_location {
+        margin-top: 20px;
+        margin-left: 70px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-5">
+            <div class="user_img">
+                <img src="{{profile.profileimg.url}}"  class="rounded-pill">
+            </div>
+        </div>
+
+        <div class="col-7">
+            <div class="user_info">
+                <div class="user_name">
+                    <h2>{{profile.user}}</h2>
+                </div>
+                <label >{{post_count}} 貼文</label>
+                <label >5 位粉絲</label>
+                <label >15 追蹤中</label>
+    
+                {% if profile.location == "" %}
+                    <div class="user_location">
+                        <!-- 隱藏 -->
+                    </div>
+                {% else %}
+                    <div class="user_location">
+                        居住於 {{profile.location}}
+                    </div>
+                {% endif %}
+                <div class="user_about">
+                    {{profile.about}}
+                </div>
+            </div>
+        </div>
+
+        {% for p in post %}
+        
+            <div class="col-4" style="margin-bottom: 15px; margin-top: 30px;">
+                <a href="{{p.image.url}}">
+                    <img src="{{p.image.url}}" style="width:340px ;height: 293px;">
+                </a>
+            </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+
+    
+{% endblock %}

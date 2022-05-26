@@ -2,6 +2,7 @@
     .navbar{
         margin-bottom: 5%;
     }
+
 </style>
 
 <div class="navbar">
@@ -53,8 +54,8 @@
                         </li>
         
                         <li class="nav-item">
-                            <a class="navbar-brand" href="/settings">
-                                <img src="{{user_profile.profileimg.url}}" alt="Avatar Logo" style="width:30px; height: 30px;" class="rounded-pill"> 
+                            <a class="navbar-brand" href="{% url 'profile' user_profile.user %}">
+                                <img src="{{user_profile.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
                             </a>
                         </li>
         
