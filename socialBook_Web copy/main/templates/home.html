@@ -1,35 +1,48 @@
 {% extends 'main.html' %}
 {% block home-page %}
 
+<style>
+    .card {
+        padding:0;
+        margin-bottom:5rem;
+    }
+    .card-title {
+        margin-top: 10px;
+        margin-left:5px;
+        padding:0;
+        
+    }
+    .card-title a {
+        color:black;
+        margin-left:5px;
+        text-decoration: none;
+    }
+    .card-title a:hover {
+        color:rgb(106, 106, 106);
+    }
+</style>
+    
+
+
     {% for p in post_content reversed %}
+
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card" style="width: 40rem; height:40rem; margin-bottom: 5%;">
-                <div class="card-body">
-
-                    <style>
-                        .card-title a {
-                            color:black;
-                            text-decoration: none;
-                        }
-                        .card-title a:hover {
-                            color:rgb(106, 106, 106);
-                        }
-                    </style>
+            <div class="card">
 
                     <div class="card-title">
                         <a href="{% url 'profile' p.author_img.user %}">
                             <img src="{{p.author_img.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
                         </a>
                         <a href="{% url 'profile' p.author_img.user %}">
-                            @{{p.user}}
+                            {{p.user}}
                         </a>    
                     </div>
                 
                     
                     <div class="card-img" style="text-align: center;">
                         <a href="{{p.image.url}}">
-                            <img style="max-width: 35rem; max-height: 25rem;"
+                            <img style="width: 35rem; max-height: 30rem;"
                             src="{{p.image.url}}" alt="">
                         </a>
 
@@ -84,8 +97,6 @@
             
                     </div>
 
-
-
                     <div class="card-likes" style="margin-top: 3%;">
   
                         <strong>愛心數：{{p.no_of_likes}}</strong>
@@ -96,7 +107,7 @@
                         <strong>{{p.user}}:</strong>{{p.caption}}
                     </div>
 
-                </div>
+                
             </div>
         </div>
     </div>

@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% block profile %}
+
 <style>
     .user_img  {
         width:15rem; height: 15rem;
@@ -86,7 +87,7 @@
                     </form>
                 {% elif follow_key == "self_profile" %}
                     <a href="/settings">
-                        <button class="btn btn-success" type="submit">
+                        <button class="btn btn-dark" type="submit">
                             使用者設定
                         </button>
                     </a>
