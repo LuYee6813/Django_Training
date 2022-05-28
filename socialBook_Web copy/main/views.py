@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Profile,Post,LikePost
+from .models import Profile,Post,LikePost, FollowersCount
 
 
 @login_required(login_url='loginUser')
@@ -82,14 +82,48 @@ def profile(request,username):
     user_profile = Profile.objects.get(user=request.user)
     profile = Profile.objects.get(user=User.objects.get(username=username))
 
-    post = Post.objects.filter(user=User.objects.get(username=username))
-    post_count = Post.objects.filter(user=User.objects.get(username=username)).count()
+    # 貼文
+    posts = Post.objects.filter(user=User.objects.get(username=username))
 
+    # 當前目錄使用者的粉絲
+    followers = FollowersCount.objects.filter(user=User.objects.get(username=username))
+
+    # 當前目錄使用者追蹤的使用者
+    users = FollowersCount.objects.filter(follower=User.objects.get(username=username))
+
+    
+    # 如果目錄使用者的粉絲有請求使用者
+    if followers.filter(user=User.objects.get(username=username),follower=request.user.username):
+        follow_key = True
+
+    # 如果是瀏覽自己使用者目錄
+    elif username == str(User.objects.get(username=request.user.username)):
+        follow_key = "self_profile"
+    
+    # 請求使用者不在目錄使用者粉絲
+    else:
+        follow_key = False
+
+
+    # 追蹤動作 追蹤or退追
+    follow_action = request.POST.get("follow_action")
+
+    if follow_action == "add":
+        FollowersCount.objects.create(user=username,follower=request.user.username)
+        return redirect(f'/profile/{username}')
+    elif follow_action == "del":
+        FollowersCount.objects.get(user=username,follower=request.user.username).delete()
+        return redirect(f'/profile/{username}')
+    else:
+        pass 
+    
     context = {
         "user_profile":user_profile,
         "profile":profile,
-        "post_count":post_count,
-        "post":post,
+        "posts":posts,
+        "followers":followers,
+        "users":users,
+        "follow_key":follow_key
     }
     return render(request, 'profile.html',context)
 
