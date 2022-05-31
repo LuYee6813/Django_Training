@@ -10,13 +10,15 @@ from .models import Profile,Post,LikePost, FollowersCount
 def home(request):
     user_profile = Profile.objects.get(user=request.user)
     post_content = Post.objects.all()
-    post_like = LikePost.objects.all()
+    
+    like_post = LikePost.objects.filter(username=request.user)
     
     context = {
         "user_profile":user_profile,
         "post_content":post_content,
-        "post_like":post_like
+        "like_post":like_post,
     }
+
     return render(request,'home.html',context)
 
 def signup(request):
@@ -179,18 +181,21 @@ def like_post(request):
     username = request.user.username
     post_id = request.GET.get('post_id')
     post = Post.objects.get(id=post_id)
-    like_filter = LikePost.objects.filter(post_id=post_id , username=username).first()
-    if like_filter == None:
-        new_like = LikePost.objects.create(post_id=post_id, username=username)
-        new_like.save()
-        post.no_of_likes = post.no_of_likes + 1
-        post.save()
-        return redirect('/')      
-    else:
-        like_filter.delete()
-        post.no_of_likes = post.no_of_likes - 1
+    post_status = LikePost.objects.filter(post_id=post_id, username=username).first()
+
+    # 加到like_post列表
+    if post_status == None:
+        LikePost.objects.create(post_id=post_id, username=username)
+        LikePost.objects.get(post_id=post_id, username=username).save()
+
+        post.no_of_likes += 1
         post.save()
         return redirect('/')
+    else:
+        like_post = LikePost.objects.get(post_id=post_id, username=username)
+        like_post.delete()
         
+        post.no_of_likes -= 1
+        post.save()
+        return redirect('/')
 
-   
