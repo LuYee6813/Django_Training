@@ -62,8 +62,31 @@
 {% endif %}
 
 
-{% for p in post_content reversed %}
+<!-- Debug資料 -->
 
+<!-- 你是
+{{request.user.username}}
+
+<br>
+
+你追蹤了
+{% for fu in follower_users %}
+    {{fu.user}}
+{% endfor %}
+
+<br>
+
+顯示的貼文
+{% for p in post_content %}
+    {{p.user}}
+{% endfor %} -->
+
+<!--  -->
+
+
+
+
+{% for p in post_content reversed %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="card">

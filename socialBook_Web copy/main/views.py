@@ -9,17 +9,23 @@ from django.db.models import Q
 @login_required(login_url='loginUser')
 def home(request):
     q = request.GET.get('q') 
+    follower_users = FollowersCount.objects.filter(follower=User.objects.get(username=request.user.username))
 
     # 搜尋時
     if q != None:
         post_content = Post.objects.filter( Q(user__icontains=q) | Q(caption__icontains=q))
         user_content = Profile.objects.filter(Q(user__username__icontains=q))
-    # 沒搜尋時
+    # 沒搜尋時顯示追蹤的貼文(還有自己的貼文)
     else :
-        post_content = Post.objects.all()
-        user_content = None
-    
+        follower_users_list = []
+        follower_users_list.append(request.user.username)
 
+        for fu in follower_users:
+            follower_users_list.append(fu.user) 
+        print(follower_users_list)
+
+        post_content = Post.objects.filter(Q(user__in=follower_users_list))
+        user_content = None
 
     user_profile = Profile.objects.get(user=request.user)
     
@@ -28,6 +34,7 @@ def home(request):
     
     context = {
         "user_profile":user_profile,
+        "follower_users":follower_users,
         "post_content":post_content,
         "user_content":user_content,
         "like_post":like_post
