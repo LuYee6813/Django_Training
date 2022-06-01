@@ -4,19 +4,33 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile,Post,LikePost, FollowersCount
-
+from django.db.models import Q
 
 @login_required(login_url='loginUser')
 def home(request):
+    q = request.GET.get('q') 
+
+    # 搜尋時
+    if q != None:
+        post_content = Post.objects.filter( Q(user__icontains=q) | Q(caption__icontains=q))
+        user_content = Profile.objects.filter(Q(user__username__icontains=q))
+    # 沒搜尋時
+    else :
+        post_content = Post.objects.all()
+        user_content = None
+    
+
+
     user_profile = Profile.objects.get(user=request.user)
-    post_content = Post.objects.all()
+    
     
     like_post = LikePost.objects.filter(username=request.user)
     
     context = {
         "user_profile":user_profile,
         "post_content":post_content,
-        "like_post":like_post,
+        "user_content":user_content,
+        "like_post":like_post
     }
 
     return render(request,'home.html',context)

@@ -22,8 +22,44 @@
     .card-title a:hover {
         color:rgb(106, 106, 106);
     }
+
+
+
 </style>
     
+
+
+{% if user_content != None %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="card" id="profile">
+                <div class="card-title">
+                    <h4>用戶</h4>
+                </div>
+                {% for u in user_content %}
+                    <div class="card-user-profile">
+                        <div class="container">
+                            <div class="row justify-content-center" style="margin:1em;">
+                                <div class="col-5">
+                                    <a href="{% url 'profile' u.user %}">   
+                                        <img src="{{u.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+                                    </a> 
+                                </div>
+                                <div class="col-7">
+                                    <a href="{% url 'profile' u.user %}" style="color:black">  
+                                        {{u.user}}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 
 {% for p in post_content reversed %}
