@@ -22,12 +22,8 @@
     .card-title a:hover {
         color:rgb(106, 106, 106);
     }
-
-
-
 </style>
     
-
 
 {% if user_content != None %}
 <div class="container">
@@ -62,35 +58,41 @@
 {% endif %}
 
 
-<!-- Debug資料 -->
-
-<!-- 你是
-{{request.user.username}}
-
-<br>
-
-你追蹤了
-{% for fu in follower_users %}
-    {{fu.user}}
-{% endfor %}
-
-<br>
-
-顯示的貼文
-{% for p in post_content %}
-    {{p.user}}
-{% endfor %} -->
-
-<!--  -->
 
 
-
-
-{% for p in post_content reversed %}
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="card">
 
+    <!-- 推薦追蹤 -->
+    <div class="row justify-content-end">
+        <div class="col-3">
+            <div class="card">
+                <h4>推薦追蹤</h4>
+                <div class="row">
+                    {% for su in suggestions_user_profile %}
+        
+                    <div class="col-3">
+                        <a href="{% url 'profile' su.user %}">   
+                            <img src="{{su.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+                        </a> 
+                    </div>
+
+                    <div class="col-7">
+                        <a href="{% url 'profile' su.user %}" style="color:black">  
+                            {{su.user}} 
+                        </a>
+                    </div>
+                        
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 貼文 -->
+    {% for p in post_content reversed %}
+    <div class="row justify-content-center">
+
+        <div class="card">
                 <div class="card-title">
                     <a href="{% url 'profile' p.author_img.user %}">
                         <img src="{{p.author_img.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
@@ -100,7 +102,6 @@
                     </a>    
                 </div>
             
-                
                 <div class="card-img" style="text-align: center;">
                     <a href="{{p.image.url}}">
                         <img style="width: 35rem; max-height: 30rem;"
@@ -108,7 +109,6 @@
                     </a>
 
                 </div>
-
 
                 <div class="card-function" style="margin-top: 3%;">
                     <style>
@@ -150,13 +150,15 @@
                     <strong>{{p.user}}:</strong>{{p.caption}}
 
                 </div>
-
         
         </div>
+
     </div>
+    {% endfor %}
+
 </div>
 
-{% endfor %}
+
 
 <!-- 把按過的post愛心使用post_id尋找並改成紅色 -->
 {% for lp in like_post %}

@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime
 
 
+
 class Profile(models.Model):
     # 依附現有的使用者做選擇
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -14,9 +15,11 @@ class Profile(models.Model):
     profileimg = models.ImageField(upload_to='profile_images', default='default_profileimage.jpeg')
     location = models.CharField(max_length=100, blank=True)
     about = models.TextField(blank=True)
-    
+
+
     def __str__(self):
         return self.user.username
+
 
 class Post(models.Model):
     id = models.UUIDField(primary_key=True ,default=uuid.uuid4)
@@ -42,3 +45,5 @@ class FollowersCount(models.Model):
 
     def __str__(self):
         return f'{self.user}_followers:{self.follower}'
+
+

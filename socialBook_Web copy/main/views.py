@@ -5,39 +5,55 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile,Post,LikePost, FollowersCount
 from django.db.models import Q
+import random
 
 @login_required(login_url='loginUser')
 def home(request):
     q = request.GET.get('q') 
     follower_users = FollowersCount.objects.filter(follower=User.objects.get(username=request.user.username))
+    user_profile = Profile.objects.get(user=request.user)
+    like_post = LikePost.objects.filter(username=request.user)
+
+    # 沒搜尋時顯示自己和追蹤的貼文和推薦使用者
+    follower_users_list = []
+    follower_users_list.append(request.user.username)
+
+    for fu in follower_users:
+        follower_users_list.append(fu.user) 
+
+    post_content = Post.objects.filter(user__in=follower_users_list)
+    user_content = None
+
+
+    # 推薦使用者
+    all_users = User.objects.values_list('username', flat=True) # 此時過濾出來的是Queryset 
+    all_users_list = list(all_users)# 轉list
+    suggestions_list = [x for x in all_users_list if (x not in follower_users_list)]
+    random.shuffle(suggestions_list)
+    
+    suggestions_list_id = User.objects.filter(username__in=suggestions_list)
+    suggestions_user_profile = Profile.objects.filter(user__in=suggestions_list_id)
+    
+    # Debug
+    # print(f'所有使用者：{all_users_list}')
+    # print(f'追蹤的使用者:{follower_users_list}')
+    # print(f'推薦追蹤的使用者:{suggestions_list}')
 
     # 搜尋時
     if q != None:
         post_content = Post.objects.filter( Q(user__icontains=q) | Q(caption__icontains=q))
-        user_content = Profile.objects.filter(Q(user__username__icontains=q))
-    # 沒搜尋時顯示追蹤的貼文(還有自己的貼文)
-    else :
-        follower_users_list = []
-        follower_users_list.append(request.user.username)
+        user_content = Profile.objects.filter(user__username__icontains=q)
+        
 
-        for fu in follower_users:
-            follower_users_list.append(fu.user) 
-        print(follower_users_list)
 
-        post_content = Post.objects.filter(Q(user__in=follower_users_list))
-        user_content = None
 
-    user_profile = Profile.objects.get(user=request.user)
-    
-    
-    like_post = LikePost.objects.filter(username=request.user)
-    
     context = {
         "user_profile":user_profile,
         "follower_users":follower_users,
         "post_content":post_content,
         "user_content":user_content,
-        "like_post":like_post
+        "like_post":like_post,
+        "suggestions_user_profile":suggestions_user_profile[:5]
     }
 
     return render(request,'home.html',context)
