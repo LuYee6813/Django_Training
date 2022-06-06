@@ -1,0 +1,126 @@
+{% extends 'main.html' %}
+{% block profile %}
+
+<style>
+    .user_img  {
+        width:15rem; height: 15rem;
+        margin-left: 60px;
+    }
+    .user_img img {
+        margin-top: 7%;
+        width:15rem; height: 15rem;
+    }
+
+    .user_name {
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    .user_info label {
+        text-align: center;
+        margin-right: 20px;
+    }
+    .user_about{
+        font-size: 20px;
+        margin-top: 25px;
+    }
+    .user_location {
+        margin-top: 20px;
+    }
+
+    .follow_info button {
+        margin-top: 90px;
+        margin-left: 90px;
+        width:150px;
+        height:40px;
+    }
+
+    #profile {
+        margin-bottom:50px;
+    }
+
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-4" id="profile">
+            <div class="user_img">
+                <img src="{{profile.profileimg.url}}"  class="rounded-pill">
+            </div>
+        </div>
+
+        <div class="col-4" style="text-align:center" id="profile">
+            <div class="user_info">
+                <div class="user_name">
+                    <h2>{{profile.user}}</h2>
+                </div>
+                <label >{{posts.count}} 貼文</label>
+                <label >{{followers.count}} 位粉絲</label>
+                <label >{{users.count}} 追蹤中</label>
+    
+                {% if profile.location == "" %}
+                    <div class="user_location">
+                        <!-- 隱藏 -->
+                    </div>
+                {% else %}
+                    <div class="user_location">
+                        居住於 {{profile.location}}
+                    </div>
+                {% endif %}
+                <div class="user_about">
+                    {{profile.about}}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-4" id="profile">
+            <div class="follow_info">
+    
+                {% if follow_key == True %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="follow_action" value="del">
+                        <button class="btn btn-primary" type="submit">
+                            取消追蹤
+                        </button>
+                    </form>
+                {% elif follow_key == "self_profile" %}
+                    <a href="/settings">
+                        <button class="btn btn-dark" type="submit">
+                            使用者設定
+                        </button>
+                    </a>
+                {% else %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="follow_action" value="add">
+                        <button class="btn btn-primary" type="submit">
+                            追蹤
+                        </button>
+                    </form>
+                {% endif %}
+        
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for post in posts %}
+        
+            <div class="col-4" style="margin-bottom: 15px; margin-top: 30px;">
+                <a href="{{post.image.url}}">
+                    <img src="{{post.image.url}}" style="width:340px ;height: 293px;">
+                </a>
+            </div>
+
+        {% endfor %}
+    </div>
+</div>
+
+
+    
+{% endblock %}

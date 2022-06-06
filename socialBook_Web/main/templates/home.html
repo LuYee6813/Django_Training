@@ -1,162 +1,140 @@
 {% extends 'main.html' %}
 {% block home-page %}
-
-
-
 <style>
-    .card {
-        padding:0;
-        margin-bottom:5rem;
+    /* 排版容器 */
+    * {
+        box-sizing: border-box;
     }
-    .card-title {
-        margin-top: 10px;
-        margin-left:5px;
-        padding:0;
-        
+    .grid-container {
+        display: grid;
+        grid-template-areas:
+            'qinfo qinfo  qinfo qinfo   qinfo    '
+            'post  post   post  sfollow sfollow  ';
+        gap: 10px;
+        padding: 10px;
     }
-    .card-title a {
-        color:black;
-        margin-left:5px;
-        text-decoration: none;
-    }
-    .card-title a:hover {
-        color:rgb(106, 106, 106);
-    }
-</style>
-    
 
-{% if user_content != None %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <div class="card" id="profile">
-                <div class="card-title">
-                    <h4>用戶</h4>
+    /* 搜尋資訊 */
+    .qinfo {grid-area:qinfo;background-color: aqua;}
+    .qinfo-body {margin-left: 13%;margin-bottom: 3%;}
+
+    /* 推薦追蹤 */
+    .sfollow {grid-area:sfollow;background-color: aqua;}
+    .sfollow-body {width: 400px;}
+    
+    /* 貼文 */
+    .post {grid-area:post;background-color: aqua;}
+    .post-body {
+        margin-left: 20%;
+        margin-bottom:5%; 
+        border: 1px solid black;
+        max-width:70%;
+    }
+
+
+</style>
+<div class="grid-container">
+    
+    <!-- 搜尋資訊 -->
+    {% if user_content != None %}
+        <div class="qinfo">
+            <div class="qinfo-body">
+                <div class="qinfo-title">
+                    <h4 >用戶</h4>
                 </div>
                 {% for u in user_content %}
-                    <div class="card-user-profile">
-                        <div class="container">
-                            <div class="row justify-content-center" style="margin:1em;">
-                                <div class="col-5">
-                                    <a href="{% url 'profile' u.user %}">   
-                                        <img src="{{u.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
-                                    </a> 
-                                </div>
-                                <div class="col-7">
-                                    <a href="{% url 'profile' u.user %}" style="color:black">  
-                                        {{u.user}}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="qinfo-user">
+                    <a href="{% url 'profile' u.user %}">   
+                        <img src="{{u.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+                    </a> 
+    
+                    <a href="{% url 'profile' u.user %}" style="color:black">  
+                        {{u.user}}
+                    </a>
+                </div>
                 {% endfor%}
             </div>
         </div>
-    </div>
-</div>
-{% endif %}
-
-
-
-
-<div class="container">
+    {% endif %}
 
     <!-- 推薦追蹤 -->
-    <div class="row justify-content-end">
-        <div class="col-3">
-            <div class="card">
+    <div class="sfollow">
+        <div class="sfollow-body">
+            <div class="sfollow-title">
                 <h4>推薦追蹤</h4>
-                <div class="row">
-                    {% for su in suggestions_user_profile %}
-        
-                    <div class="col-3">
-                        <a href="{% url 'profile' su.user %}">   
-                            <img src="{{su.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
-                        </a> 
-                    </div>
-
-                    <div class="col-7">
-                        <a href="{% url 'profile' su.user %}" style="color:black">  
-                            {{su.user}} 
-                        </a>
-                    </div>
-                        
-                    {% endfor %}
-                </div>
             </div>
+            
+            {% for su in suggestions_user_profile %}
+                <div class="sfollow-user">
+                    <a href="{% url 'profile' su.user %}">   
+                        <img src="{{su.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+                    </a> 
+    
+                    <a href="{% url 'profile' su.user %}" style="color:black">  
+                        {{su.user}} 
+                    </a>   
+                </div>               
+            {% endfor %}
+    
         </div>
+
     </div>
 
     <!-- 貼文 -->
-    {% for p in post_content reversed %}
-    <div class="row justify-content-center">
+    <div class="post">
+        {% for p in post_content reversed %}   
+        <div class="post-body">
+            <div class="post-title">
+                <a href="{% url 'profile' p.author_img.user %}">
+                    <img src="{{p.author_img.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+                </a>
+                <a href="{% url 'profile' p.author_img.user %}">
+                    {{p.user}}
+                </a>    
+            </div>
 
-        <div class="card">
-                <div class="card-title">
-                    <a href="{% url 'profile' p.author_img.user %}">
-                        <img src="{{p.author_img.profileimg.url}}"  style="width:30px; height: 30px;" class="rounded-pill"> 
+
+            <a href="{{p.image.url}}">
+                <img style="width:100%;"src="{{p.image.url}}" alt="">
+            </a>
+
+
+            <div class="post-function">                
+                <button name="post-button" >
+                    <a id="{{p.id}}" style="color:rgb(181, 181, 181)" href="/like-post?post_id={{p.id}}" >
+                        <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg>
                     </a>
-                    <a href="{% url 'profile' p.author_img.user %}">
-                        {{p.user}}
-                    </a>    
-                </div>
-            
-                <div class="card-img" style="text-align: center;">
-                    <a href="{{p.image.url}}">
-                        <img style="width: 35rem; max-height: 30rem;"
-                        src="{{p.image.url}}" alt="">
-                    </a>
-
-                </div>
-
-                <div class="card-function" style="margin-top: 3%;">
-                    <style>
-                        .card-function button {
-                                outline: none; 
-                                border: none;
-                                width: 30px; 
-                                height: 30px; 
-                                margin: 0; 
-                                padding: 0; 
-                                background-color: white;
-                        }
-
-
-                    </style>
-
+                </button>
                         
+            </div>
 
-                    <button name="like-button" >
-                        <a id="{{p.id}}" style="color:rgb(181, 181, 181)" href="/like-post?post_id={{p.id}}" >
-                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                            </svg>
-                        </a>
-                    </button>
+            <div class="post-likes">
+
+                <strong>愛心數：{{p.no_of_likes}}</strong>
 
 
-                            
-                </div>
+            </div>
 
-                <div class="card-likes"  style="margin-top: 3%;">
+            <div class="post-message">
+                <strong>{{p.user}}:</strong>{{p.caption}}
 
-                    <strong>愛心數：{{p.no_of_likes}}</strong>
-
-
-                </div>
-
-                <div class="card-message" style="margin-top: 3%;">
-                    <strong>{{p.user}}:</strong>{{p.caption}}
-
-                </div>
-        
-        </div>
-
+            </div>
+        </div> 
+        {% endfor %}
     </div>
-    {% endfor %}
 
 </div>
+
+
+
+
+
+
+
+
+
 
 
 
